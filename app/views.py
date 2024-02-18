@@ -11,7 +11,12 @@ def login(request):
 
 @login_required
 def profile(request, username):
-    vars = {
-        "username": username,
-    }
-    return render(request, "profile.html", vars)
+    try:
+        uid = User.objects.get(username=username)
+        vars = {
+            "username": uid.username,
+            "email": uid.email
+        }
+        return render(request, "profile.html", vars)
+    except Exception:
+        return render(request, "notfound.html")
